@@ -8,6 +8,7 @@ import(
   "errors"
   "net/url"
   "encoding/json"
+  "os"
 )
 
 type Credentials struct {
@@ -36,8 +37,8 @@ func check(c Credentials) (bool, error){
     values[i] = vof.Field(i).Interface()
   }
 
-  // if values contains "blank", they missed a flag and we need to error
-  return inArray("blank", values)
+  // if values contains "blank"/nil, they missed a flag and we need to error
+  return inArray(nil, values)
 }
 
 func format_results(r anaconda.SearchResponse) ([]interface{}){
@@ -56,21 +57,32 @@ func main() {
   c := new(Credentials)
 
   // declare cli flags (name, default, description)
-  consumer_key := flag.String("consumer_key", "blank", "consumer key")
-  consumer_secret := flag.String("consumer_secret", "blank", "consumer secret")
-  access_token := flag.String("access_token", "blank", "access token")
-  access_token_secret := flag.String("access_secret", "blank", "access token secret")
-  query := flag.String("query", "blank", "search term")
-  limit := flag.String("limit", "1", "number of results to return")
-  since := flag.String("since", "0", "return results since this")
+  // TODO:
+  //   Revisit flags and get them to work with a docker run command
+  //consumer_key := flag.String("consumer_key", "blank", "consumer key")
+  //consumer_secret := flag.String("consumer_secret", "blank", "consumer secret")
+  //access_token := flag.String("access_token", "blank", "access token")
+  //access_token_secret := flag.String("access_secret", "blank", "access token secret")
+  //query := flag.String("query", "blank", "search term")
+  //limit := flag.String("limit", "1", "number of results to return")
+  //since := flag.String("since", "0", "return results since this")
   
-  flag.Parse()
+  //flag.Parse()
 
   // assign parsed flags to struct
-  c.Consumer_key = *consumer_key
-  c.Consumer_secret = *consumer_secret
-  c.Access_token = *access_token
-  c.Access_token_secret = *access_token_secret
+  //c.Consumer_key = *consumer_key
+  //c.Consumer_secret = *consumer_secret
+  //c.Access_token = *access_token
+  //c.Access_token_secret = *access_token_secret
+
+  c.Consumer_key = os.Args[0]
+  c.Consumer_secret = os.Args[1]
+  c.Acess_token = os.Args[2]
+  c.Access_token_secret = os.Args[3]
+
+  query := os.Args[4]
+  limit := os.Args[5]
+  since := os.args[6]
 
   // make sure none of them are still default values
   // throw simple 'flag missing' error if any of them are
@@ -86,9 +98,9 @@ func main() {
 
   // make the request to search end point
   v := url.Values{}
-  v.Set("count", *limit)
-  v.Set("since_id", *since)
-  result, _ := api.GetSearch(*query, v)
+  v.Set("count", limit)
+  v.Set("since_id", since)
+  result, _ := api.GetSearch(query, v)
 
   // return results json
   r,err := json.Marshal(result)
