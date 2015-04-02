@@ -16,7 +16,7 @@ microservice:
   developer_name: 'cgmoore120'
   developer_type: 'User'
   published: true
-  command: '/go-twitter-query "{\"consumer_key\" : \"[twitter_consumer_key]\", \"consumer_secret\" : \"[twitter_consumer_secret]\", \"access_token\" : \"[twitter_access_token]\", \"access_token_secret\" : \"[twitter_access_secret]\", \"query\" : \"[search_term]\", \"limit\" : \"[results_limit]\", \"since\" : \"[since_id]\"}"'
+  command: "/go-twitter-query \"{\"consumer_key\" : \"[twitter_consumer_key]\", \"consumer_secret\" : \"[twitter_consumer_secret]\", \"access_token\" : \"[twitter_access_token]\", \"access_token_secret\" : \"[twitter_access_secret]\", \"query\" : \"[search_term]\", \"limit\" : \"[results_limit]\", \"since\" : \"[since_id]\"}\""
   inputs:
     twitter_consumer_key:
       <<: *secure_string
