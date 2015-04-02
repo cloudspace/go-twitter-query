@@ -1,3 +1,9 @@
+secure_string: &secure_string
+  param_type: 'String'
+  regex: '^.*$'
+  required: true
+  secure: true
+
 microservice:
   name: 'go-twitter-query'
   description: "Use Twitter's Search API"
@@ -10,15 +16,43 @@ microservice:
   developer_name: 'cgmoore120'
   developer_type: 'User'
   published: true
-  command: '/go-twitter-query [string]'
+  command: '/go-twitter-query "{\"consumer_key\" : \"[twitter_consumer_key]\", \"consumer_secret\" : \"[twitter_consumer_secret]\", \"access_token\" : \"[twitter_access_token]\", \"access_token_secret\" : \"[twitter_access_secret]\", \"query\" : \"[search_term]\", \"limit\" : \"[results_limit]\", \"since\" : \"[since_id]\"}"'
   inputs:
-    string:
+    twitter_consumer_key:
+      <<: *secure_string
+      description: 'Twitter Consumer key'
+    twitter_consumer_secret:
+      <<: *secure_string
+      description: 'Twitter Consumer secret'
+    twitter_access_token:
+      <<: *secure_string
+      description: 'Twitter Access token'
+    twitter_access_secret:
+      <<: *secure_srtring
+      desceription: 'Twitter Access secret'
+    search_term:
       param_type: 'String'
       regex: '^.*$'
-      required: true
-      secure: true
-      description: 'Stringified JSON hash of values'
-  outputs:
-    string:
+      required: false
+      secure: false
+      description: 'Term to search for'
+    results_limit:
       param_type: 'String'
-      description: 'JSON string results'
+      regex: '^.*$'
+      required: false
+      secure: false
+      description: 'How many reults to return. Max 100'
+    since_id:
+      param_type: 'String'
+      regex: '^.*$'
+      required: false
+      secure: false
+      description: 'Get results since this tweet_id'
+    
+  outputs:
+    statuses:
+      param_type: 'Array'
+      description: 'Array of tweets with relevant data to them'
+    search_metadata:
+      param_type: 'String'
+      description: 'Results metadata, including time run, max_id, etc'
