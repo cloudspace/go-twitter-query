@@ -23,11 +23,6 @@ func search_request(a *Args) (anaconda.SearchResponse) {
   anaconda.SetConsumerSecret(a.Consumer_secret)
   api:= anaconda.NewTwitterApi(a.Access_token, a.Access_token_secret)
 
-  fmt.Println("============= a1 ===========")
-  fmt.Println(a)  
-  fmt.Println("========= a.Consumer_key ===================")
-  fmt.Println(a.Consumer_key)
-
   // make the request to search end point with optional params or defaults
   v := url.Values{}
   v.Set("count", string(a.Limit))
@@ -36,26 +31,13 @@ func search_request(a *Args) (anaconda.SearchResponse) {
   if err != nil {
     fmt.Println(err)
   }
-  fmt.Println("===== result =========")
-  fmt.Println(result)
   return result
 }
 
 func main() {
   a := &Args{Limit: "1", Since: "0"}
   json_str := []byte(os.Args[1])
-  fmt.Println("======== json_str ========") 
-  fmt.Println(json_str)
   err := json.Unmarshal(json_str, a)
-  fmt.Println("============ a =========")
-  fmt.Println(a)
-  fmt.Println(a.Consumer_key)
-  fmt.Println(a.Consumer_secret)
-  fmt.Println(a.Access_token)
-  fmt.Println(a.Access_token_secret)
-  fmt.Println(a.Query)
-  fmt.Println(a.Limit)
-  fmt.Println(a.Since)
 
   if err != nil {
     fmt.Println(err)
@@ -67,7 +49,5 @@ func main() {
   if err != nil {
     fmt.Println(err)
   }
-  fmt.Println("========== a2 ===========")
-  fmt.Println(a)
   fmt.Println(string(result_json))
 }
