@@ -28,7 +28,7 @@ microservice:
       <<: *secure_string
       description: 'Twitter Access token'
     twitter_access_secret:
-      <<: *secure_srtring
+      <<: *secure_string
       desceription: 'Twitter Access secret'
     search_term:
       param_type: 'String'
