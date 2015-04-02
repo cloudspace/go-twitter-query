@@ -1,112 +1,73 @@
 package main
 
 import(
-  "flag"
   "fmt"
   "github.com/ChimeraCoder/anaconda"
-  "reflect"
-  "errors"
   "net/url"
   "encoding/json"
   "os"
 )
 
-type Credentials struct {
-  Consumer_key        string
-  Consumer_secret     string
-  Access_token        string
-  Access_token_secret string
+type Args struct {
+  Consumer_key         string `json:"consumer_key"`
+  Consumer_secret      string `json:"consumer_secret"`
+  Access_token         string `json:"access_token"`
+  Access_token_secret  string `json:"Access_token_secret"`
+  Query                string `json:"query"`
+  Limit                string `json:"limit"`
+  Since                string `json:"since"`
 }
 
-func inArray(a string, list []interface{}) (bool, error) {
-    for _, b := range list {
-        if b == a {
-            return true, errors.New("flag missing")
-        }
-    }
-    return false, nil
-}
+func search_request(a *Args) (anaconda.SearchResponse) {
+  anaconda.SetConsumerKey(a.Consumer_key)
+  anaconda.SetConsumerSecret(a.Consumer_secret)
+  api:= anaconda.NewTwitterApi(a.Access_token, a.Access_token_secret)
 
-func check(c Credentials) (bool, error){
-  // loop through struct fields and assign to values array
-  vof := reflect.ValueOf(c)
+  fmt.Println("============= a1 ===========")
+  fmt.Println(a)  
+  fmt.Println("========= a.Consumer_key ===================")
+  fmt.Println(a.Consumer_key)
 
-  values := make([]interface{}, vof.NumField())
-
-  for i := 0; i < vof.NumField(); i++ {
-    values[i] = vof.Field(i).Interface()
-  }
-
-  // if values contains "blank"/nil, they missed a flag and we need to error
-  return inArray(nil, values)
-}
-
-func format_results(r anaconda.SearchResponse) ([]interface{}){
-  values := make([]interface{}, len(r.Statuses))
-
-  for i := 0; i < len(r.Statuses); i++ {
-    values[i] = r.Statuses[i].Text
-  }
-
-  return values
-}
-
-func main() {
-
-  // declare struct
-  c := new(Credentials)
-
-  // declare cli flags (name, default, description)
-  // TODO:
-  //   Revisit flags and get them to work with a docker run command
-  //consumer_key := flag.String("consumer_key", "blank", "consumer key")
-  //consumer_secret := flag.String("consumer_secret", "blank", "consumer secret")
-  //access_token := flag.String("access_token", "blank", "access token")
-  //access_token_secret := flag.String("access_secret", "blank", "access token secret")
-  //query := flag.String("query", "blank", "search term")
-  //limit := flag.String("limit", "1", "number of results to return")
-  //since := flag.String("since", "0", "return results since this")
-  
-  //flag.Parse()
-
-  // assign parsed flags to struct
-  //c.Consumer_key = *consumer_key
-  //c.Consumer_secret = *consumer_secret
-  //c.Access_token = *access_token
-  //c.Access_token_secret = *access_token_secret
-
-  c.Consumer_key = os.Args[0]
-  c.Consumer_secret = os.Args[1]
-  c.Acess_token = os.Args[2]
-  c.Access_token_secret = os.Args[3]
-
-  query := os.Args[4]
-  limit := os.Args[5]
-  since := os.args[6]
-
-  // make sure none of them are still default values
-  // throw simple 'flag missing' error if any of them are
-  _, e := check(*c)
-  if e != nil {
-    fmt.Println(e)
-  }
-
-  // set up anaconda package creds
-  anaconda.SetConsumerKey(c.Consumer_key)
-  anaconda.SetConsumerSecret(c.Consumer_secret)
-  api:= anaconda.NewTwitterApi(c.Access_token, c.Access_token_secret)
-
-  // make the request to search end point
+  // make the request to search end point with optional params or defaults
   v := url.Values{}
-  v.Set("count", limit)
-  v.Set("since_id", since)
-  result, _ := api.GetSearch(query, v)
-
-  // return results json
-  r,err := json.Marshal(result)
+  v.Set("count", string(a.Limit))
+  v.Set("since_id", string(a.Since))
+  result, err := api.GetSearch(string(a.Query), v)
   if err != nil {
     fmt.Println(err)
   }
-  fmt.Println(string(r))
+  fmt.Println("===== result =========")
+  fmt.Println(result)
+  return result
+}
 
+func main() {
+  a := &Args{Limit: "1", Since: "0"}
+  json_str := []byte(os.Args[1])
+  fmt.Println("======== json_str ========") 
+  fmt.Println(json_str)
+  err := json.Unmarshal(json_str, a)
+  fmt.Println("============ a =========")
+  fmt.Println(a)
+  fmt.Println(a.Consumer_key)
+  fmt.Println(a.Consumer_secret)
+  fmt.Println(a.Access_token)
+  fmt.Println(a.Access_token_secret)
+  fmt.Println(a.Query)
+  fmt.Println(a.Limit)
+  fmt.Println(a.Since)
+
+  if err != nil {
+    fmt.Println(err)
+  }
+
+  result := search_request(a)
+
+  result_json,err := json.Marshal(result)
+  if err != nil {
+    fmt.Println(err)
+  }
+  fmt.Println("========== a2 ===========")
+  fmt.Println(a)
+  fmt.Println(string(result_json))
 }
