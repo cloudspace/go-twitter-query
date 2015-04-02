@@ -30,6 +30,7 @@ func search_request(a *Args) (anaconda.SearchResponse) {
   result, err := api.GetSearch(string(a.Query), v)
   if err != nil {
     fmt.Println(err)
+    return err
   }
   return result
 }
