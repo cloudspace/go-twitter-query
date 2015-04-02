@@ -8,7 +8,7 @@ microservice:
   name: 'go-twitter-query'
   description: "Use Twitter's Search API"
   docker_image: 'cloudspace/go-twitter-query'
-  docker_image_tag: '0.1.2'
+  docker_image_tag: '0.1.3'
   docker_hub_url: 'https://registry.hub.docker.com/u/cloudspace/go-twitter-query/'
   repo_url: 'https://github.com/cloudspace/go-twitter-query'
   category: 'Twitter'
