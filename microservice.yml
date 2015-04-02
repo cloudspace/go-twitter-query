@@ -1,0 +1,24 @@
+microservice:
+  name: 'go-twitter-query'
+  description: "Use Twitter's Search API"
+  docker_image: 'cgmoore120/go-twitter-query'
+  docker_image_tag: '0.1.0'
+  docker_hub_url: 'https://registry.hub.docker.com/u/cloudspace/go-twitter-query/'
+  repo_url: 'https://github.com/cloudspace/go-twitter-query'
+  category: 'Twitter'
+  tags: ['twitter', 'golang', 'go', 'client', 'search', 'tweet', 'tweets', 'hashtags', 'hashtag']
+  developer_name: 'cgmoore120'
+  developer_type: 'User'
+  published: true
+  command: '/go-twitter-query [string]'
+  inputs:
+    string:
+      param_type: 'String'
+      regex: '^.*$'
+      required: true
+      secure: true
+      description: 'Stringified JSON hash of values'
+  outputs:
+    string:
+      param_type: 'String'
+      description: 'JSON string results'
