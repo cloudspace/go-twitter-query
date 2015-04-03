@@ -1,18 +1,17 @@
 # go-twitter-query
 
 ## Input
-Takes a JSON string. Does not play well with `\'`, `\"` preferred.
+Passed in values in order are:
 
-Required keys are:
   - consumer_key
   - consumer_secret
   - access_token
   - access_token_secret
   - query
+  - limit
+  - since
 
-`limit` and `since` are optional
-
-`./go-twitter-query "{\"consumer_key\" : \"VAL\", \"consumer_secret\" : \"VAL\", \"access_token\" : \"VAL\", \"access_token_secret\" : \"VAL\", \"query\" : \"VAL\", \"since\" : \"VAL\", \"limit\" : \"VAL\"}"`
+`./go-twitter-query "CK_VAL" "CS_VAL" "AT_VAL" "ATS_VAL" "Q_VAL" "L_VAL" "S_VAL"`
 
 ## Output
 Returns JSON
@@ -27,8 +26,8 @@ Keys: `statuses`, `search_metadata`
 
 ## Build
 
-`docker build -t cgmoore120/go-twitter-query ./`
+`docker build -t cloudspace/go-twitter-query ./`
 
 ## Run
 
-`docker run -ti cgmoore120/go-twitter-query:0.1.1 ./go-twitter-query "{\"consumer_key\" : \"VAL\", \"consumer_secret\" : \"VAL\", \"access_token\" : \"VAL\", \"access_token_secret\" : \"VAL\", \"query\" : \"VAL\", \"limit\" : \"VAL\", \"since\" : \"VAL\"}"`
+`docker run -ti cloudspace/go-twitter-query:0.2.0 ./go-twitter-query "CK_VAL" "CS_VAL" "AT_VAL" "ATS_VAL" "Q_VAL" "L_VAL" "S_VAL"`

@@ -8,7 +8,7 @@ microservice:
   name: 'go-twitter-query'
   description: "Use Twitter's Search API"
   docker_image: 'cloudspace/go-twitter-query'
-  docker_image_tag: '0.1.4'
+  docker_image_tag: '0.2.0'
   docker_hub_url: 'https://registry.hub.docker.com/u/cloudspace/go-twitter-query/'
   repo_url: 'https://github.com/cloudspace/go-twitter-query'
   category: 'Twitter'
@@ -16,7 +16,7 @@ microservice:
   developer_name: 'cgmoore120'
   developer_type: 'User'
   published: true
-  command: "/go-twitter-query \"{\"consumer_key\" : \"[twitter_consumer_key]\", \"consumer_secret\" : \"[twitter_consumer_secret]\", \"access_token\" : \"[twitter_access_token]\", \"access_token_secret\" : \"[twitter_access_secret]\", \"query\" : \"[search_term]\", \"limit\" : \"[results_limit]\", \"since\" : \"[since_id]\"}\""
+  command: "/go-twitter-query '[twitter_consumer_key]' '[twitter_consumer_secret]' '[twitter_access_token]' '[twitter_access_secret]' '[search_term]' '[results_limit]' '[since_id]'"
   inputs:
     twitter_consumer_key:
       <<: *secure_string

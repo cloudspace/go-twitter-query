@@ -30,19 +30,29 @@ func search_request(a *Args) (anaconda.SearchResponse) {
   result, err := api.GetSearch(string(a.Query), v)
   if err != nil {
     fmt.Println(err)
-    return err
+    //return anaconda.SearchResponse(err)
   }
   return result
 }
 
 func main() {
   a := &Args{Limit: "1", Since: "0"}
-  json_str := []byte(os.Args[1])
-  err := json.Unmarshal(json_str, a)
 
-  if err != nil {
-    fmt.Println(err)
-  }
+  a.Consumer_key = os.Args[1]
+  a.Consumer_secret = os.Args[2]
+  a.Access_token = os.Args[3]
+  a.Access_token_secret = os.Args[4]
+  a.Query = os.Args[5]
+  a.Limit = os.Args[6]
+  a.Since = os.Args[7]
+
+  //json_str := []byte(os.Args[1])
+  //err := json.Unmarshal(json_str, a)
+
+  
+  //if err != nil {
+    //fmt.Println(err)
+  //}
 
   result := search_request(a)
 
